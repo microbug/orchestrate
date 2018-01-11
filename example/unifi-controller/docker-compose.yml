@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  unifi:
+    container_name: unifi
+    environment:
+      PGID: 1000
+      PUID: 1000
+    image: linuxserver/unifi:latest
+    networks:
+      default:
+        ipv4_address:
+          192.168.0.3
+    volumes:
+      - /services-data/unifi-controller:/config
+
+networks:
+  default:
+    external:
+      name: external-network

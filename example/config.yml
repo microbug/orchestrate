@@ -1,0 +1,8 @@
+base-directory: /services
+shutdown-timeout: 20
+prune: true
+macvlan-network:
+  name: "external-network"
+  subnet: "255.255.255.0"
+  gateway: "192.168.0.1"
+  parent: eth0
