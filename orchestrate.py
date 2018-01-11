@@ -120,7 +120,7 @@ def shell(services, config):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", "-c", default="config.yml", help="location of the config file")
+    parser.add_argument("--config", "-c", default="config.yml", help="location of the config file (default is ./config.yml)")
     subparsers = parser.add_subparsers(title="action", dest="action")
     parser_start = subparsers.add_parser("start", help="start the service(s)")
     parser_stop = subparsers.add_parser("stop", help="stop the service(s)")
