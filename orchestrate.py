@@ -89,6 +89,10 @@ def shell(services, config):
     for index, container_id in enumerate(container_ids):
         container_ids[index] = container_id.decode("ascii")
 
+    if len(container_ids) == 0:
+        print("No containers running! Exiting")
+        exit(3)
+
     if len(container_ids) > 1:
         container_names = []
         print("Multiple containers running, select from the following:")
