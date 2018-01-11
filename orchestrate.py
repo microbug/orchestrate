@@ -146,7 +146,7 @@ def main():
 
     if config["prune"] is True:
         reclaimed_space = 0
-        reclaimed_space += docker_client.images.prune(filters={'dangling': True})['SpaceReclaimed']
+        reclaimed_space += docker_client.images.prune()['SpaceReclaimed']
         reclaimed_space += docker_client.volumes.prune()['SpaceReclaimed']
         reclaimed_space += docker_client.containers.prune()['SpaceReclaimed']
         reclaimed_space /= 1e6
