@@ -29,6 +29,49 @@ action:
                         prompted if there are multiple)
 ```
 
+### Basic operations
+Start a service (latest version of image:tag will be pulled automatically):
+```sh
+./orchestrate.py start service1
+```
+
+Start several services:
+```sh
+./orchestrate.py start service1,service2,service3
+```
+
+Stop a service:
+```sh
+$ ./orchestrate.py stop deluge
+
+Reclaimed 0.0MB
+Applying action 'stop' to the following services: 'deluge'
+Stopping deluge
+Stopping deluge ... done
+Stopping vpn    ... done
+Removing deluge ... done
+Removing vpn    ... done
+Network external-network is external, skipping
+```
+
+Access the shell of a service:
+```sh
+$ ./orchestrate.py shell deluge
+
+Reclaimed 83MB
+Applying action 'shell' to the following services: 'deluge'
+Multiple containers running, select from the following:
+0 : Exit
+1 : deluge
+2 : vpn
+> 1
+Entering container deluge
+root@6dcc3073e2ab:/$ ls
+app  config    dev        etc   init  libexec  mnt   root  sbin  sys  usr
+bin  defaults  downloads  home  lib   media    proc  run   srv   tmp  var
+```
+
+## Configuration
 ### Directory structure
 All this should be within the `base-directory` specified in `config.yml`. A full example can be seen in `/example`.
 
