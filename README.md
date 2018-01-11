@@ -17,7 +17,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --config CONFIG, -c CONFIG
-                        location of the config file
+                        location of the config file (default is ./config.yml)
 
 action:
   {start,stop,restart,status,shell}
@@ -28,3 +28,35 @@ action:
     shell               enter the shell of a service's container (you will be
                         prompted if there are multiple)
 ```
+
+### Directory structure
+All this should be within the `base-directory` specified in `config.yml`. A full example can be seen in `/example`.
+
+```
+|-- orchestrate.py
+|-- config.yml
+|--| service1
+   |-- docker-compose.yml
+   |-- service1-file
+|--| service2
+   |-- docker-compose.yml
+|--| service3
+   |-- docker-compose.yml
+   |-- servce3-example-file
+```
+
+### Sample configuration file
+The below will have each container assigned an IP address in the range 192.168.0.2–192.168.0.254
+
+```yaml
+base-directory: /services      # Directory containing orchestrate.py, config.yml and subdirectories for each service
+shutdown-timeout: 20           # Timeout when shutting down containers
+prune: true                    # Whether to delete old containers, images and volumes
+macvlan-network:
+  name: "microbug.uk-internal" # The name of the macvlan network that is shared between all services
+  subnet: "255.255.255.0"      # Network subnet
+  gateway: "192.168.0.1"       # Network gateway (usually your router's IP address)
+  parent: eth0                 # Parent interface (usually eth0, check with `ip addr`)
+```
+
+### Sample docker-compose.yml
