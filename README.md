@@ -29,6 +29,14 @@ action:
                         prompted if there are multiple)
 ```
 
+### Prerequisites
+- Python 3.5+
+    - [Python Docker API](https://pypi.python.org/pypi/docker/)
+    - [PyYAML](https://github.com/yaml/pyyaml)
+- Docker Community Edition
+    - docker-compose
+- Currently orchestrate.py must be run on the target machine by a user who is a member of the `docker` group. If you need remote capabilities (TLS), open an issue and I'll implement it.
+
 ### Basic operations
 Start a service (latest version of image:tag will be pulled automatically):
 ```sh
