@@ -2,7 +2,7 @@
 Orchestrate lets you manage multiple Docker-based services via docker-compose.
 
 ## What is this?
-Orchestrate was written to control docker-compose services easily and give each service its own IP address through macvlan networking. This makes each service easy to access without having to manually expose ports. It's less secure to expose each service directly to the network without a firewall, but this is intended for already-secure internal networks. If a service needs a firewall, it's fairly easy to whip up an Alpine / iptables container. More detail on this coming soon^TM.
+Orchestrate was written to control docker-compose services easily and give each service its own IP address through macvlan networking. This makes each service easy to access without having to manually expose ports. It's less secure to expose each service directly to the network without a firewall, but this is intended for already-secure internal networks. If a service needs a firewall, it's fairly easy to whip up an Alpine / iptables container. More detail on this coming soon (TM).
 
 ## Usage
 ```
