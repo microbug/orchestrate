@@ -77,13 +77,19 @@ def status(services, config):
         print("")  # newline
 
 
-def shell(services, config):
+def verify_only_one_service(services):
     if len(services) > 1:
-        print("! Error: shell only takes one service as an argument")
+        print("! Error: this command only takes one service as an argument")
         print("! Exiting")
         exit(2)
+    else:
+        return services[0]
 
-    proc = docker_compose_execute(service=services[0], commands=["ps", "-q"],
+
+def shell(services, config):
+    service = verify_only_one_service(services)
+
+    proc = docker_compose_execute(service=service, commands=["ps", "-q"],
                                   config=config, capture_stdout=True)
     container_ids = proc.stdout.splitlines()
     for index, container_id in enumerate(container_ids):
@@ -94,7 +100,6 @@ def shell(services, config):
         exit(3)
 
     if len(container_ids) > 1:
-        container_names = []
         print("Multiple containers running, select from the following:")
         print("0 : Exit")
         for index, container_id in enumerate(container_ids):
@@ -107,7 +112,8 @@ def shell(services, config):
                     response = int(response)
                     break
                 else:
-                    print(response + " is greater than the maximum number")
+                    print(response + " is greater than the maximum number (" +
+                          str(len(container_ids)) + ")")
             else:
                 print(response + " is not an integer")
         if response == 0:
@@ -122,6 +128,20 @@ def shell(services, config):
     subprocess.run(["docker", "exec", "-it", container_id, "sh"])
 
 
+def logs(services, config, no_follow):
+    service = verify_only_one_service(services)
+
+    commands = ["logs"]
+    if no_follow is False:
+        commands.append("-f")
+    try:
+        proc = docker_compose_execute(service=service, commands=commands,
+                                      config=config)
+    except KeyboardInterrupt:
+        print("Keyboard interrupt caught, exiting")
+        exit(0)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", "-c", default="config.yml", help="location of the config file (default is ./config.yml)")
@@ -133,6 +153,8 @@ def main():
     parser_restart.add_argument("--force", "-f", action="store_true", help="force the service(s) to stop before they are started again")
     parser_status = subparsers.add_parser("status", help="get the status of the service(s)")
     parser_shell = subparsers.add_parser("shell", help="enter the shell of a service's container (you will be prompted if there are multiple)")
+    parser_logs = subparsers.add_parser("logs", help="follow the logs of a service")
+    parser_logs.add_argument("--no-follow", "-n", action="store_true", help="print current logs but do not follow further output")
     parser.add_argument("service", help="which service(s) to act on (a list in the form a,b,c or 'all')")
     args = parser.parse_args()
 
@@ -175,19 +197,17 @@ def main():
 
     if args.action == "start":
         start(services, config)
-
-    if args.action == "stop":
+    elif args.action == "stop":
         stop(services, config)
-
-    if args.action == "restart":
+    elif args.action == "restart":
         stop(services, config)
         start(services, config)
-
-    if args.action == "status":
+    elif args.action == "status":
         status(services, config)
-
-    if args.action == "shell":
+    elif args.action == "shell":
         shell(services, config)
+    elif args.action == "logs":
+        logs(services, config, args.no_follow)
 
 
 if __name__ == "__main__":
